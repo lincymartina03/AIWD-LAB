@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annual Cultural Fest 2025</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Verdana, sans-serif;
+            background-color: #f9f3f3;
+        }
+
+        /* Header */
+        header {
+            background-color: #8e0e4f;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        /* Main Container */
+        .container {
+            width: 85%;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 25px;
+        }
+
+        /* Banner */
+        .banner img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        /* Event Info */
+        .info h2 {
+            color: #8e0e4f;
+        }
+
+        /* Form */
+        label {
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+        }
+
+        input[type="radio"] {
+            width: auto;
+        }
+
+        button {
+            background-color: #8e0e4f;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #6f0b3e;
+        }
+
+        /* Media */
+        .media {
+            margin-top: 30px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #8e0e4f;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <h1>Annual Cultural Fest 2025</h1>
+    <p>Celebrate Dance • Music • Art</p>
+</header>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <!-- IMAGE -->
+    <div class="banner">
+        <img src="event-banner.jpg" alt="Cultural Fest Banner">
+    </div>
+
+    <!-- DETAILS -->
+    <div class="info">
+        <h2>Rangoli & Rhythm Night</h2>
+        <p>
+            A vibrant cultural celebration featuring classical dance,
+            folk music, fashion walk, and art exhibitions.
+        </p>
+        <p><b>Date:</b> 15th January 2025</p>
+        <p><b>Venue:</b> Open Air Theatre</p>
+    </div>
+
+    <!-- FORM -->
+    <h2>Participant Registration</h2>
+
+    <form>
+        <label>Participant Name:</label>
+        <input type="text" required>
+
+        <label>Email:</label>
+        <input type="email" required>
+
+        <label>Department / College:</label>
+        <input type="text" required>
+
+        <label>Event Category:</label>
+        <select required>
+            <option value="">-- Select Category --</option>
+            <option>Dance</option>
+            <option>Music</option>
+            <option>Drama</option>
+            <option>Art & Craft</option>
+        </select>
+
+        <label>Participation Type:</label><br>
+        <input type="radio" name="type" required> Solo
+        <input type="radio" name="type"> Group
+        <br><br>
+
+        <label>Additional Notes:</label>
+        <textarea rows="4"></textarea>
+
+        <button type="submit">Submit Registration</button>
+    </form>
+
+    <!-- MEDIA -->
+    <div class="media">
+        <h2>Event Highlights</h2>
+
+        <p>Background Music:</p>
+        <audio controls>
+            <source src="Promo Audio.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+
+        <p>Previous Year Video:</p>
+        <video width="100%" controls>
+            <source src="Promo Video.mp4" type="video/mp4">
+            Your browser does not support video.
+        </video>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 Cultural Committee | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
