@@ -1,0 +1,143 @@
+Quiz App with Timer
+
+quiz.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timed Quiz</title>
+    <link rel="stylesheet" href="quiz-style.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="timer-box">Time Left: <span id="seconds">10</span>s</div>
+        <p id="warning" style="color: red; font-weight: bold;"></p>
+
+        <form id="quizForm">
+            <div class="question">
+                <p>1. Which language runs in a web browser?</p>
+                <input type="radio" name="q1" value="Java"> Java
+                <input type="radio" name="q1" value="C"> C
+                <input type="radio" name="q1" value="JS"> JavaScript
+            </div>
+            <div class="question">
+                <p>2. What does CSS stand for?</p>
+                <input type="radio" name="q2" value="A"> Cascading Style Sheets
+                <input type="radio" name="q2" value="B"> Control Style Sheet
+            </div>
+            <button type="submit" id="submitBtn">Submit Quiz</button>
+        </form>
+        <h2 id="result"></h2>
+    </div>
+
+    <script src="quiz.js"></script>
+</body>
+</html>
+
+quiz.js
+
+let timeLeft = 10;
+const timerDisplay = document.getElementById("seconds");
+const warningMsg = document.getElementById("warning");
+const quizForm = document.getElementById("quizForm");
+
+// Correct Answers
+const answers = { q1: "JS", q2: "A" };
+
+const timerInterval = setInterval(() => {
+    timeLeft--;
+    timerDisplay.innerText = timeLeft;
+
+    if (timeLeft === 5) {
+        warningMsg.innerText = "Only 5 seconds remaining!";
+    }
+
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        submitQuiz(); // Auto-submit
+    }
+}, 1000);
+
+quizForm.onsubmit = function(e) {
+    e.preventDefault();
+    clearInterval(timerInterval);
+    submitQuiz();
+};
+
+function submitQuiz() {
+    let score = 0;
+    const formData = new FormData(quizForm);
+
+    // Calculate Score
+    for (let [key, value] of formData.entries()) {
+        if (value === answers[key]) score++;
+    }
+
+    // Disable all inputs
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => input.disabled = true);
+    document.getElementById("submitBtn").disabled = true;
+
+    // Display Result
+    document.getElementById("result").innerText = `Quiz Over! Your Score: ${score}/2`;
+    warningMsg.innerText = "Time's up!";
+}
+
+Event Countdown Timer
+
+countdown.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Countdown</title>
+    <style>
+        .timer-grid { display: flex; gap: 20px; font-family: sans-serif; }
+        .unit { text-align: center; background: #333; color: white; padding: 10px; border-radius: 5px; min-width: 60px; }
+        #status { font-size: 24px; color: red; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>Event Registration Deadline</h2>
+    <div class="timer-grid">
+        <div class="unit"><h3 id="days">00</h3>Days</div>
+        <div class="unit"><h3 id="hours">00</h3>Hrs</div>
+        <div class="unit"><h3 id="minutes">00</h3>Min</div>
+        <div class="unit"><h3 id="seconds">00</h3>Sec</div>
+    </div>
+    <div id="status"></div>
+
+    <script>
+        // Set target date (Change this to a future date)
+        const targetDate = new Date("Dec 31, 2026 23:59:59").getTime();
+
+        const countdown = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // Calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update DOM
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+
+            // If reached zero
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.querySelector(".timer-grid").style.display = "none";
+                document.getElementById("status").innerText = "Registration Closed";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
+
