@@ -1,0 +1,69 @@
+Basic Node.js Server
+
+server.js
+
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    const name = "LINCY"; 
+    const currentTime = new Date();
+
+    // Set the response header
+    res.writeHead(200, { "Content-Type": "text/html" });
+
+    // Send the response body
+    res.write(`<h2>Hello from ${name}'s Node.js Server</h2>`);
+    res.write(`<p>Current Date and Time: ${currentTime.toString()}</p>`);
+    
+    // Signal that the response is complete
+    res.end();
+});
+
+// Port 3000, "0.0.0.0" allows external network access
+server.listen(3000, "0.0.0.0", () => {
+    console.log("Server running at http://localhost:3000");
+    console.log("To test on your network, find your IP and use http://<your-ip>:3000");
+});
+
+Handling Multiple Routes
+
+
+routeserver.js
+
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    const name = "Gemini"; // 👈 REPLACE WITH YOUR NAME
+    const url = req.url;
+
+    // Logic for routing
+    if (url === "/") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write(`<h2>Hello from ${name}'s Node.js Server</h2>`);
+        res.end();
+    } 
+    else if (url === "/about") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write("<h2>About Page</h2>");
+        res.write("<p>This server is created using Node.js built-in HTTP module.</p>");
+        res.end();
+    } 
+    else if (url === "/contact") {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.write("<h2>Contact Page</h2>");
+        res.write(`<p>Email: ${name.toLowerCase()}@example.com</p>`);
+        res.end();
+    } 
+    else {
+        // Handle 404 - Not Found
+        res.writeHead(404, { "Content-Type": "text/html" });
+        res.write("<h2>404 - Page Not Found</h2>");
+        res.write("<p>The requested URL does not exist on this server.</p>");
+        res.end();
+    }
+});
+
+server.listen(3000, "0.0.0.0", () => {
+    console.log("Route Server started on http://localhost:3000");
+});
+
