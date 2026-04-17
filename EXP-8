@@ -1,0 +1,142 @@
+Part 1: Database Setup
+
+CREATE DATABASE eventdb;
+USE eventdb;
+
+CREATE TABLE registrations (
+    regno VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    events TEXT NOT NULL
+);
+
+Part 2: Project Structure & HTML Files
+
+Registration Page (index.html)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registration</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Event Registration Form</h2>
+    <form action="/register" method="POST" id="regForm">
+        <label>Register Number:</label><br>
+        <input type="text" name="regno" required><br><br>
+
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Select Events (Max 3):</label><br>
+        <input type="checkbox" name="events" value="Coding Challenge"> Coding Challenge<br>
+        <input type="checkbox" name="events" value="Debugging Contest"> Debugging Contest<br>
+        <input type="checkbox" name="events" value="Web Design"> Web Design<br>
+        <input type="checkbox" name="events" value="Quiz Competition"> Quiz Competition<br>
+        <input type="checkbox" name="events" value="Paper Presentation"> Paper Presentation<br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('regForm');
+        form.onsubmit = function() {
+            const checkboxes = document.querySelectorAll('input[name="events"]:checked');
+            if (checkboxes.length === 0) {
+                alert("Please select at least one event.");
+                return false;
+            }
+            if (checkboxes.length > 3) {
+                alert("You can select a maximum of 3 events.");
+                return false;
+            }
+            return true;
+        };
+    </script>
+</body>
+</html>
+
+
+
+Node.js Backend (server.js)
+
+
+const express = require('express');
+const mysql = require('mysql2');
+const bodyParser = require('body-parser');
+const path = require('path');
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+// MySQL Connection
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',      // Replace with your MySQL username
+    password: '',      // Replace with your MySQL password
+    database: 'eventdb'
+});
+
+db.connect(err => {
+    if (err) throw err;
+    console.log("Connected to MySQL Database");
+});
+
+// Part 2: Handle Registration
+app.post('/register', (req, res) => {
+    const { regno, name, events } = req.body;
+    
+    // Ensure events is an array and check length
+    const selectedEvents = Array.isArray(events) ? events : [events];
+    
+    if (selectedEvents.length > 3) {
+        return res.send("<h2>Error: Maximum 3 events allowed.</h2><a href='/'>Go Back</a>");
+    }
+
+    const eventList = selectedEvents.join(', ');
+
+    const sql = "INSERT INTO registrations (regno, name, events) VALUES (?, ?, ?)";
+    db.query(sql, [regno, name, eventList], (err, result) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.send("<h2>Error: This Register Number is already registered.</h2><a href='/'>Go Back</a>");
+            }
+            throw err;
+        }
+        res.send(`<h2>Registration Successful!</h2><p>Thank you ${name}.</p><a href='/'>Home</a>`);
+    });
+});
+
+// Part 4: Admin Search Functionality
+app.get('/search', (req, res) => {
+    const regno = req.query.regno;
+    const sql = "SELECT * FROM registrations WHERE regno = ?";
+
+    db.query(sql, [regno], (err, results) => {
+        if (err) throw err;
+
+        if (results.length > 0) {
+            const user = results[0];
+            res.send(`
+                <h2>Registration Details</h2>
+                <p><strong>Register Number:</strong> ${user.regno}</p>
+                <p><strong>Name:</strong> ${user.name}</p>
+                <p><strong>Events:</strong> ${user.events}</p>
+                <br><a href="/admin.html">New Search</a>
+            `);
+        } else {
+            res.send("<h2>Error: Register Number not found.</h2><a href='/admin.html'>Try Again</a>");
+        }
+    });
+});
+
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
+
+
