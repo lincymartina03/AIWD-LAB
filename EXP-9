@@ -1,0 +1,84 @@
+Node.js with MongoDB (server.js)
+
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const bodyParser = require('body-parser');
+const path = require('path');
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+// MongoDB Connection Configuration
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+const dbName = 'eventdb';
+let db, registrations;
+
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log("Connected successfully to MongoDB");
+        db = client.db(dbName);
+        registrations = db.collection('registrations');
+        
+        // Create a unique index on regno to prevent duplicates
+        await registrations.createIndex({ regno: 1 }, { unique: true });
+    } catch (err) {
+        console.error("MongoDB Connection Error:", err);
+    }
+}
+connectDB();
+
+// POST: Register User
+app.post('/register', async (req, res) => {
+    try {
+        const { regno, name, events } = req.body;
+        
+        // Ensure events is an array
+        const selectedEvents = Array.isArray(events) ? events : [events];
+
+        // Validation: Max 3 events
+        if (selectedEvents.length > 3) {
+            return res.send("<h2>Error: Max 3 events allowed.</h2><a href='/'>Go Back</a>");
+        }
+
+        // Insert into MongoDB
+        const doc = { regno, name, events: selectedEvents };
+        await registrations.insertOne(doc);
+        
+        res.send(`<h2>Registration Successful!</h2><p>Welcome, ${name}!</p><a href='/'>Home</a>`);
+    } catch (err) {
+        if (err.code === 11000) {
+            res.send("<h2>Error: This Register Number is already registered.</h2><a href='/'>Go Back</a>");
+        } else {
+            res.status(500).send("Server Error");
+        }
+    }
+});
+
+// GET: Admin Search
+app.get('/search', async (req, res) => {
+    try {
+        const searchRegNo = req.query.regno;
+        const result = await registrations.findOne({ regno: searchRegNo });
+
+        if (result) {
+            res.send(`
+                <h2>Participant Found</h2>
+                <p><strong>Register Number:</strong> ${result.regno}</p>
+                <p><strong>Name:</strong> ${result.name}</p>
+                <p><strong>Events:</strong> ${result.events.join(', ')}</p>
+                <br><a href="/admin.html">New Search</a>
+            `);
+        } else {
+            res.send("<h2>Error: Register Number not found.</h2><a href='/admin.html'>Try Again</a>");
+        }
+    } catch (err) {
+        res.status(500).send("Search Error");
+    }
+});
+
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
