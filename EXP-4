@@ -1,1 +1,156 @@
+index.html
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initializePage()"> <header id="main-header"> <h1 class="title">Event Registration</h1> <p>Fill the form to participate</p>
+</header>
+
+<div class="container">
+    <img src="https://picsum.photos/900/400" alt="Event Banner" class="banner">
+
+    <form id="regForm"> <h2>Participant Details</h2>
+
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required onkeyup="validateEmail()"> <label for="phone">Mobile Number</label>
+        <input type="tel" id="phone" placeholder="Enter mobile number" required>
+
+        <label for="event">Select Event</label>
+        <select id="event" required onchange="calculateTotal()"> <option value="0">-- Choose Event --</option>
+            <option value="50">Workshop ($50)</option>
+            <option value="30">Seminar ($30)</option>
+            <option value="100">Hackathon ($100)</option>
+            <option value="20">Cultural Fest ($20)</option>
+        </select>
+
+        <div id="fee-display">
+            <strong>Total Fee: $<span id="total-price">0</span></strong> </div>
+
+        <label>
+            <input type="checkbox" id="terms" required> I agree to the terms & conditions
+        </label>
+
+        <button type="submit" id="submitBtn">Submit Registration</button>
+    </form>
+
+    <div id="success-msg" style="display:none; text-align:center; padding:20px; color: green;">
+        <h3 id="msg-text"></h3>
+    </div>
+
+    <div class="media">
+        <audio controls><source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg"></audio>
+        <video controls><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<footer>
+    <p>© 2025 Event Management Team</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+script.js
+
+
+// TC06: onload function
+function initializePage() {
+    console.log("DOM fully loaded and parsed");
+    // TC01: getElementById
+    const header = document.getElementById("main-header");
+    header.style.borderBottom = "5px solid #ec4899";
+}
+
+// TC08: Calculations & TC05: onchange
+function calculateTotal() {
+    // TC01: querySelector
+    const eventSelect = document.querySelector("#event");
+    const priceDisplay = document.getElementById("total-price");
+    
+    let price = parseInt(eventSelect.value);
+    priceDisplay.innerText = price; // TC07: Dynamic update
+}
+
+// TC04: onkeyup validation
+function validateEmail() {
+    const emailInput = document.getElementById("email");
+    if (emailInput.value.includes("@")) {
+        emailInput.style.borderColor = "#10b981"; // Green if valid
+    } else {
+        emailInput.style.borderColor = "#ef4444"; // Red if invalid
+    }
+}
+
+// TC05 & TC10: onsubmit handling
+const form = document.getElementById("regForm");
+form.onsubmit = function(event) {
+    event.preventDefault(); // Prevent page reload
+
+    // TC01: getElementById
+    const name = document.getElementById("name").value;
+    
+    // TC07: DOM Manipulation (Hide form, show success)
+    form.style.display = "none";
+    const successDiv = document.getElementById("success-msg");
+    const msgText = document.getElementById("msg-text");
+    
+    successDiv.style.display = "block";
+    msgText.innerText = "Congratulations " + name + "! Your registration is successful.";
+
+    // TC02: getElementsByClassName
+    const titles = document.getElementsByClassName("title");
+    for(let t of titles) {
+        t.style.color = "#10b981";
+    }
+
+    // TC03: getElementsByTagName
+    const labels = document.getElementsByTagName("label");
+    console.log("Total labels processed: " + labels.length);
+};
+
+// TC02: querySelectorAll example (Logs all inputs to console)
+const allInputs = document.querySelectorAll("input");
+allInputs.forEach(input => {
+    input.addEventListener("focus", () => {
+        console.log("User is typing in: " + input.id);
+    });
+});
+
+
+style.css
+
+
+/* ... Keep all your previous CSS ... */
+
+#fee-display {
+    background: #f3f4f6;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    text-align: right;
+    font-size: 1.1rem;
+    color: #4f46e5;
+}
+
+#success-msg {
+    animation: fadeIn 0.5s ease-in;
+    border: 2px dashed #10b981;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
