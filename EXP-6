@@ -1,0 +1,174 @@
+events.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Explorer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .event { border: 2px solid #ccc; padding: 15px; margin: 10px; border-radius: 8px; transition: 0.3s; }
+        .details { display: none; margin-top: 10px; padding: 10px; background: #f9f9f9; }
+        .highlight { color: #6366f1; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div class="event">
+        <h3>Tech Workshop 2026</h3>
+        <p>Date: May 15, 2026</p>
+        <div class="details">
+            <p>Learn the latest in AI and Web Dev.</p>
+            <button class="reg-btn">Register</button>
+        </div>
+        <button class="toggle-btn">Show Details</button>
+    </div>
+
+    <div class="event">
+        <h3>Design Seminar</h3>
+        <p>Date: June 10, 2026</p>
+        <div class="details">
+            <p>UI/UX principles for modern apps.</p>
+            <button class="reg-btn">Register</button>
+        </div>
+        <button class="toggle-btn">Show Details</button>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        // Toggle Details Logic
+        $(".toggle-btn").click(function() {
+            const container = $(this).closest(".event");
+            const detailDiv = container.find(".details");
+            const title = container.find("h3");
+
+            // 1. Slide Toggle Effect
+            detailDiv.slideToggle();
+
+            // 2. Change Button Text
+            $(this).text($(this).text() === "Show Details" ? "Hide Details" : "Show Details");
+
+            // 3. Change Background Color using css()
+            container.css("background-color", "#e0e7ff");
+
+            // 4. Traversing & Highlighting
+            title.addClass("highlight");
+
+            // 5. Retrieve Title and Alert
+            const eventTitle = title.text();
+            alert("Viewing details for: " + eventTitle);
+        });
+
+        // 6. Registration Redirect with Data Passing
+        $(".reg-btn").click(function() {
+            const eventName = $(this).closest(".event").find("h3").text();
+            // Encode URI to handle spaces in titles
+            window.location.href = "registration.html?event=" + encodeURIComponent(eventName);
+        });
+    });
+    </script>
+</body>
+</html>
+
+
+registration.html
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .error { color: red; font-size: 0.9em; display: block; margin-top: -10px; margin-bottom: 10px; }
+        input { display: block; margin-bottom: 15px; width: 300px; padding: 8px; border: 1px solid #ccc; }
+        #status-msg { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Register for Event</h2>
+    <form id="regForm">
+        <label>Event Name:</label>
+        <input type="text" id="event-name" readonly style="background: #eee;">
+
+        <label>Full Name:</label>
+        <input type="text" id="user-name" placeholder="Enter name">
+        <span id="name-err" class="error"></span>
+
+        <label>Email:</label>
+        <input type="text" id="user-email" placeholder="email@example.com">
+        <span id="email-err" class="error"></span>
+
+        <label>Mobile Number:</label>
+        <input type="text" id="user-phone" placeholder="10-digit mobile">
+        <span id="phone-err" class="error"></span>
+
+        <button type="submit" id="submit-btn">Submit</button>
+        <button type="button" id="reset-btn">Reset</button>
+    </form>
+    <div id="status-msg"></div>
+
+    <script>
+    $(document).ready(function() {
+        // Step 1: Get Event Name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedEvent = urlParams.get('event');
+        if(selectedEvent) {
+            $("#event-name").val(selectedEvent);
+        }
+
+        // Handle Submit
+        $("#regForm").submit(function(e) {
+            e.preventDefault();
+            $(".error").text(""); // Clear old errors
+            $("input").css("border-color", "#ccc"); // Reset borders
+
+            let isValid = true;
+            const name = $("#user-name").val().trim();
+            const email = $("#user-email").val().trim();
+            const phone = $("#user-phone").val().trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Validation Logic
+            if(name === "") {
+                $("#user-name").css("border-color", "red");
+                $("#name-err").text("Name is required");
+                isValid = false;
+            }
+
+            if(!emailRegex.test(email)) {
+                $("#user-email").css("border-color", "red");
+                $("#email-err").text("Invalid email format");
+                isValid = false;
+            }
+
+            if(phone.length < 10 || isNaN(phone)) {
+                $("#user-phone").css("border-color", "red");
+                $("#phone-err").text("Enter at least 10 digits");
+                isValid = false;
+            }
+
+            // Success Handling
+            if(isValid) {
+                $("#status-msg").text("Registration Successful for " + name)
+                                .css("color", "green");
+                
+                $("#submit-btn").prop("disabled", true).text("Registered");
+            }
+        });
+
+        // Reset Logic
+        $("#reset-btn").click(function() {
+            // Clear all fields except the readonly event name
+            $("#user-name, #user-email, #user-phone").val("");
+            $(".error").text("");
+            $("input").css("border-color", "#ccc");
+            $("#status-msg").text("");
+            $("#submit-btn").prop("disabled", false).text("Submit");
+        });
+    });
+    </script>
+</body>
+</html>
