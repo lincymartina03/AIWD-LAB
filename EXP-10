@@ -31,3 +31,169 @@ INDEX.HTML
 <script src="script.js"></script>
 </body>
 </html>
+
+
+about.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About - AI Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>About Us</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section>
+    <p>This website is developed using AI tools like ChatGPT, Canva AI, and GitHub Copilot.</p>
+</section>
+
+<footer>
+    <p>© 2026 AI Website</p>
+</footer>
+
+</body>
+</html>
+
+services.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services - AI Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Our Services</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section>
+    <ul>
+        <li>AI Website Design</li>
+        <li>Content Generation</li>
+        <li>UI/UX Design</li>
+        <li>Code Automation</li>
+    </ul>
+</section>
+
+<footer>
+    <p>© 2026 AI Website</p>
+</footer>
+
+</body>
+</html>
+
+contact.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact - AI Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Contact Us</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section>
+    <form onsubmit="return submitForm()">
+        <input type="text" placeholder="Your Name" required><br><br>
+        <input type="email" placeholder="Your Email" required><br><br>
+        <textarea placeholder="Your Message" required></textarea><br><br>
+        <button type="submit">Send</button>
+    </form>
+</section>
+
+<footer>
+    <p>© 2026 AI Website</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+style.css
+
+body {
+    font-family: Arial;
+    margin: 0;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+header {
+    background: #333;
+    color: white;
+    padding: 15px;
+}
+
+nav a {
+    margin: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: yellow;
+}
+
+section {
+    padding: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #555;
+}
+
+footer {
+    background: #222;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+script.js
+
+function showMsg() {
+    alert("AI Generated Website!");
+}
+
+function submitForm() {
+    alert("Form submitted successfully!");
+    return false;
+}
