@@ -1,0 +1,33 @@
+INDEX.HTML
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Website - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>AI Web Design</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Welcome</h2>
+    <p>This website is created using AI tools.</p>
+    <button onclick="showMsg()">Click Me</button>
+</section>
+
+<footer>
+    <p>© 2026 AI Website</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
